@@ -2,17 +2,17 @@ import React, { useState } from "react";
 
 
 
-const Login =()=>{
+const Login =({handlelogin})=>{
 
 
-    const [email , setEmail]= useState('')
+const [email , setEmail]= useState('')
 const [password , setPassword] = useState('')
 
 
-const submithandler=(e)=>{
+const submithandler=(props)=>{
     
     console.log("Login working");
-    console.log(email)
+    handlelogin(email,password)
     setEmail("")
     setPassword("")
     
