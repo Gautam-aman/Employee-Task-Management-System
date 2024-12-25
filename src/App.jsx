@@ -1,41 +1,63 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import Login from "./components/Auth/login";
 import Empdash from "./components/dashboard/Empdash";
 import Admindash from "./components/dashboard/Admindash";
-import { Setlocalstorage } from "./utils/localstorage";
 import { AuthContext } from "./context/Authprovider";
+import { Setlocalstorage } from "./utils/localstorage";
 
 const App = ()=>{
 
-  useEffect(()=>{
-    Setlocalstorage()
-  })
+  
 
   const [User , setUser ] = useState(null);
+  const [Loggedinuser , setLoggedinuser] =useState(null);
+  const [userdata , setUserdata] = useContext(AuthContext);
+  const Authdata = useContext(AuthContext);
+
+
+   useEffect(()=>{
+
+    const Loggedinuser = localStorage.getItem('Loggedinuser')
+    if (Loggedinuser){
+      const userdata = JSON.parse(Loggedinuser);
+      setUser(userdata.role)
+      setLoggedinuser(userdata.data)
+    }
+
+  },[])
+ 
+
+  
 
   const handlelogin=(email , password)=>{
-    if (email == 'employee3@example.com' && password==123){
-      console.log("user")
-      setUser('employees')
+    if (email == 'admin@example.com' && password==123){
+      setUser('admin')
+      localStorage.setItem('Loggedinuser' , JSON.stringify({role:'admin'}))
 
     }
-    else if (email == "admin@example.com" && password==123){
-      console.log("admin")
-      setUser('admin')
+    else if (userdata){
+      const employee = userdata.find((e)=e.email == email && e.password==password)
+      if (employee){
+        setUser('employee')
+        setLoggedinuser('employee')
+        localStorage.setItem('Loggedinuser', JSON.stringify({role:'employee', data:"employee"}))
+      }
+      //setUser('employees')
+      //localStorage.setItem('Loggedinuser' , JSON.stringify({role:'employees'}))
     }
     else{
-      console.log("Invalid credentials")
+      alert("Invalid credentials")
     }
   }
 
-  const data = useContext(AuthContext);
-  console.log(data)
+  
 
   return ( 
  <>
+
+{!User?<Login handlelogin={handlelogin}/>:''}
+ {User=='admin'? <Admindash ChangeUser= {setUser}/> :(user == 'employee' ? <Empdash)}
  
- {!User?<Login handlelogin={handlelogin}/>:''}
- (User=='admin'? <Admindash/> : <Empdash/>)
  </>
   
   )

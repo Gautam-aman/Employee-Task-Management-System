@@ -9,7 +9,7 @@ const [email , setEmail]= useState('')
 const [password , setPassword] = useState('')
 
 
-const submithandler=(props)=>{
+const submithandler=(e)=>{
     
     console.log("Login working");
     handlelogin(email,password)

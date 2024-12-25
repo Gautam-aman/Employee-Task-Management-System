@@ -1,4 +1,4 @@
-import { json } from "express";
+
 
 const employees = [
     {
@@ -175,6 +175,7 @@ const employees = [
   
   export const Setlocalstorage =()=>{
     localStorage.setItem('employees', JSON.stringify(employees))
+    localStorage.setItem('admin', JSON.stringify(admin))
   }
 
   export const Getlocalstorage =()=>{
